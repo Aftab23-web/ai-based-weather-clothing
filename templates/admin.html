@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#0ea5e9">
+  <title>Admin Dashboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 min-h-screen text-gray-800">
+<body class="min-h-screen text-gray-800 bg-cover bg-fixed bg-center" style="background-image: url('https://images.unsplash.com/photo-1542281286-9e0a16bb7366?auto=format&fit=crop&w=1920&q=80');">
+
+
+  <div class="max-w-6xl mx-auto px-6 py-10">
+    <h2 class="text-4xl font-bold text-center mb-8 text-blue-700 drop-shadow"> Admin Dashboard</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <h3 class="text-lg font-bold mb-2 text-gray-700">Total Registered Users</h3>
+        <p class="text-3xl font-bold text-green-600">{{ total_users }}</p>
+      </div>
+
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <h3 class="text-lg font-bold mb-3 text-gray-700"> Top Cities Used</h3>
+        <ul class="list-disc list-inside text-sm text-gray-700">
+          {% for city, count in top_cities %}
+            <li>{{ city }} — {{ count }} times</li>
+          {% endfor %}
+        </ul>
+      </div>
+
+      <div class="bg-white shadow-lg rounded-lg p-6">
+        <h3 class="text-lg font-bold mb-3 text-gray-700">Most Common Weather</h3>
+        <ul class="list-disc list-inside text-sm text-gray-700">
+          {% for weather, count in weather_stats %}
+            <li>{{ weather }} — {{ count }} times</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6 mb-10">
+      <h3 class="text-lg font-bold text-blue-600 mb-4"> City Search Frequency</h3>
+      <canvas id="cityChart" height="100"></canvas>
+    </div>
+
+    <div class="bg-white shadow-md rounded-lg p-6 mb-10">
+      <h3 class="text-lg font-bold text-purple-600 mb-4"> Outfit Recommendation by Weather</h3>
+      <canvas id="weatherChart" height="100"></canvas>
+    </div>
+
+    <div class="text-center mb-8">
+      <form action="{{ url_for('download_admin_report') }}" method="get">
+        <button type="submit"
+          class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-2 rounded-lg shadow">
+           Download Admin Data
+        </button>
+      </form>
+    </div>
+
+    <div class="text-center">
+      <a href="/" class="text-blue-600 hover:underline font-medium"> Back to Home</a>
+    </div>
+  </div>
+
+  <script>
+    const cityData = JSON.parse('{{ top_cities | tojson | safe }}');
+    const weatherData = JSON.parse('{{ weather_stats | tojson | safe }}');
+
+    const ctxCity = document.getElementById('cityChart').getContext('2d');
+    new Chart(ctxCity, {
+      type: 'bar',
+      data: {
+        labels: cityData.map(c => c[0]),
+        datasets: [{
+          label: 'City Searches',
+          data: cityData.map(c => c[1]),
+          backgroundColor: 'rgba(54, 162, 235, 0.7)',
+          borderRadius: 6,
+        }]
+      },
+      options: {
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: { beginAtZero: true }
+        }
+      }
+    });
+
+    const ctxWeather = document.getElementById('weatherChart').getContext('2d');
+    new Chart(ctxWeather, {
+      type: 'doughnut',
+      data: {
+        labels: weatherData.map(w => w[0]),
+        datasets: [{
+          label: 'Outfit Requests',
+          data: weatherData.map(w => w[1]),
+          backgroundColor: ['#36a2eb', '#ff6384', '#ffcd56', '#4bc0c0', '#8e44ad'],
+        }]
+      }
+    });
+  </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/service-worker.js')
+      .then(function(reg) {
+        console.log("Service Worker registered ✅");
+      });
+  }
+</script>
+</body>
+</html>

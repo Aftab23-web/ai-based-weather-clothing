@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#0ea5e9">
+  <title>Recommendation History</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url('/static/images/history-bg.jpg'); /*  Choose a modern professional background */
+      background-size: cover;
+      background-position: center;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center text-gray-800 px-4">
+
+  <div class="glass max-w-5xl w-full p-8 rounded-xl shadow-2xl border border-white/20 mt-10 mb-10">
+    <h2 class="text-3xl font-bold text-center text-white mb-6 drop-shadow">Your Recommendation History</h2>
+
+    <div class="overflow-x-auto">
+      <table class="w-full table-auto text-sm text-left bg-white/90 rounded-md overflow-hidden shadow-md">
+        <thead class="bg-blue-500 text-white">
+          <tr>
+            <th class="px-4 py-2">City</th>
+            <th class="px-4 py-2">Weather</th>
+            <th class="px-4 py-2">Temp (°C)</th>
+            <th class="px-4 py-2">Recommendation</th>
+            <th class="px-4 py-2">Timestamp</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-800">
+          {% for row in history %}
+            <tr class="border-b hover:bg-blue-50">
+              <td class="px-4 py-2">{{ row.city }}</td>
+              <td class="px-4 py-2 capitalize">{{ row.weather }}</td>
+              <td class="px-4 py-2">{{ row.temp }}</td>
+              <td class="px-4 py-2">{{ row.rec }}</td>
+              <td class="px-4 py-2">{{ row.timestamp }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="text-center mt-6">
+      <a href="/" class="text-blue-200 hover:underline text-lg font-semibold">Back to Recommendation</a>
+    </div>
+  </div>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/service-worker.js')
+      .then(function(reg) {
+        console.log("Service Worker registered ");
+      });
+  }
+</script>
+<script src="/static/script.js"></script>
+</body>
+</html>

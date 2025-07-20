@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#0ea5e9">
+  <title>Outfit Recommendation</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url('/static/images/index-bg.jpg'); /*  Replace with a scenic background */
+      background-size: cover;
+      background-position: center;
+    }
+    .glass {
+      background: rgba(255, 255, 255, 0.15);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center text-gray-800 relative">
+
+  <!--  Top Right Nav -->
+  <div class="absolute top-6 right-6 flex gap-3 flex-wrap">
+    <a href="/history" class="bg-white/70 hover:bg-white text-blue-700 px-4 py-2 rounded shadow font-semibold text-sm">History</a>
+    <a href="/logout" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded shadow font-semibold text-sm">Logout</a>
+  </div>
+
+  <!--  Main Glass Card -->
+  <div class="glass max-w-md w-full p-8 rounded-xl shadow-2xl border border-white/20 text-center">
+    <h2 class="text-3xl font-bold text-white mb-6 drop-shadow">Hi, {{ current_user.name }} </h2>
+
+    <form id="recommendForm" class="space-y-5 text-left">
+      <div>
+        <label class="block text-white font-semibold mb-1">Enter City</label>
+        <input type="text" name="city" id="cityInput" required
+               class="w-full px-4 py-2 rounded-md bg-white/90 focus:outline-none focus:ring-2 focus:ring-blue-400"
+               placeholder="e.g. London, Delhi...">
+      </div>
+
+      <div>
+        <label class="block text-white font-semibold mb-1">Select Preference</label>
+        <div class="flex gap-4 mt-2">
+          <label class="text-white font-medium">
+            <input type="radio" name="preference" value="casual" checked class="mr-1"> Casual
+          </label>
+          <label class="text-white font-medium">
+            <input type="radio" name="preference" value="formal" class="mr-1"> Formal
+          </label>
+        </div>
+      </div>
+
+      <button type="submit"
+              class="w-full bg-gradient-to-r from-green-500 to-lime-500 text-white font-bold py-2 rounded-md hover:opacity-90 transition">
+         Get Recommendations
+      </button>
+    </form>
+
+    <div class="mt-6 flex flex-col gap-3 text-center">
+      <a href="{{ url_for('planner') }}" class="text-white hover:underline text-sm"> Weekly Planner</a>
+      {% if current_user.is_authenticated and current_user.is_admin %}
+        <a href="{{ url_for('admin_dashboard') }}" class="text-white hover:underline text-sm"> Admin Dashboard</a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Spinner -->
+<div id="loading-spinner" class="hidden fixed inset-0 bg-white bg-opacity-70 z-50 flex flex-col items-center justify-center">
+  <div class="border-t-4 border-blue-500 border-solid rounded-full h-14 w-14 animate-spin"></div>
+  <p class="mt-4 text-blue-700 text-lg font-semibold animate-pulse">Fetching your personalized outfit suggestions...</p>
+</div>
+
+  <!--  Form Submit Script -->
+  <script>
+    document.getElementById("recommendForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      const city = document.getElementById("cityInput").value;
+      const preference = document.querySelector('input[name="preference"]:checked').value;
+
+      fetch("/recommend", {
+        method: "POST",
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ city, preference })
+      })
+      .then(res => res.json())
+      .then(data => window.location.href = data.redirect);
+    });
+  </script>
+
+<script>
+  // Automatically attach to any form with action "/recommend" or "/planner"
+  const spinner = document.getElementById("loading-spinner");
+
+  const formsToWatch = [
+    "form[action='/recommend']",
+    "form[action='/planner']"
+  ];
+
+  formsToWatch.forEach(selector => {
+    const form = document.querySelector(selector);
+    if (form) {
+      form.addEventListener("submit", () => {
+        spinner.classList.remove("hidden");
+      });
+    }
+  });
+
+  // 🛑 Hide spinner on page load (in case it's stuck)
+  window.addEventListener("load", () => {
+    spinner.classList.add("hidden");
+  });
+</script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/service-worker.js')
+      .then(function(reg) {
+        console.log("Service Worker registered ");
+      });
+  }
+</script>
+  <script src="/static/script.js"></script>
+</body>
+</html>

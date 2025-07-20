@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Outfit Recommendation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="manifest" href="/static/manifest.json">
+  <meta name="theme-color" content="#0ea5e9">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background-image: url('/static/images/recommend-bg.jpg'); /* Make sure this path is correct */
+      background-size: cover;
+      background-position: center;
+      background-attachment: fixed;
+    }
+
+    .glass-container {
+      background-color: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      padding: 30px;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-4 py-8 text-gray-800">
+
+  <div class="glass-container w-full max-w-5xl">
+
+    <h2 class="text-3xl font-bold text-center text-blue-900 mb-6"> Weather and Outfit Recommendation</h2>
+
+    <!-- Weather Info -->
+    <div class="grid sm:grid-cols-2 gap-6 mb-8">
+      <div>
+        <p class="text-xl font-semibold text-green-700"> Location: {{ city }}</p>
+        <p> <strong>Temperature:</strong> {{ temp }}°C</p>
+        <p> <strong>Humidity:</strong> {{ humidity }}%</p>
+        <p> <strong>Pressure:</strong> {{ pressure }} hPa</p>
+        <p> <strong>Weather:</strong> {{ weather|capitalize }}</p>
+        <p> <strong>Wind Speed:</strong> {{ wind_speed }} m/s</p>
+      </div>
+    </div>
+
+    <!-- Outfit Recommendations -->
+    {% if recommendation.get("items") %}
+      <h3 class="text-2xl font-semibold text-green-800 mb-4"> Outfit Recommendations</h3>
+      <div class="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+        {% for item in recommendation["items"] %}
+          <div class="bg-white rounded-xl shadow p-4 text-center">
+            <img src="{{ item.image }}" alt="Outfit image" class="w-full h-48 object-cover rounded-lg mb-2">
+            <p class="font-medium mb-2 text-gray-700">{{ item.text }}</p>
+            <a href="{{ item.link }}" target="_blank" class="text-green-600 hover:underline font-semibold"> Buy Now</a>
+          </div>
+        {% endfor %}
+      </div>
+    {% else %}
+      <p class="text-red-600 font-semibold mb-6">No outfit recommendation found.</p>
+    {% endif %}
+
+
+    <!-- Safety Tips -->
+    <div class="mb-8">
+      <h3 class="text-xl font-semibold text-blue-800 mb-2"> Safety Tips</h3>
+      {% if tips %}
+        <ul class="list-disc pl-6 text-gray-700">
+          {% for tip in tips %}
+            <li class="mb-1">{{ tip }}</li>
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p>No safety tips available.</p>
+      {% endif %}
+    </div>
+
+    <div class="text-center">
+      <a href="{{ url_for('index') }}" class="inline-block bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition">
+         Back to Home
+      </a>
+    </div>
+  </div>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/static/service-worker.js')
+      .then(function(reg) {
+        console.log("Service Worker registered ");
+      });
+  }
+</script>
+</body>
+</html>
