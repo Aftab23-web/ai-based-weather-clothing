@@ -1,0 +1,38 @@
+# 🔐 Hide your virtual environment folder
+venv/
+env/
+ENV/
+
+# 🧪 Python cache
+__pycache__/
+*.py[cod]
+*.pyo
+
+# ⚠️ Hide your private config
+.env
+
+# 💾 Ignore local databases
+*.db
+*.sqlite3
+
+# 🚫 Ignore model files if large or private
+*.pkl
+*.h5
+*.joblib
+
+# 🖥️ Ignore system/IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+
+# 🧹 Build files
+*.egg-info/
+dist/
+build/
+
+# 📝 Log files
+*.log
+logs/
+
+# (Optional) If you use Jupyter
+.ipynb_checkpoints/
