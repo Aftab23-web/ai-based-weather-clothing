@@ -50,7 +50,7 @@ def normalize_weather(weather_main):
     mapping = {
         "clear": "clear",
         "clouds": "clear",
-        "rainy": "rainy",
+        "rain": "rainy",
         "drizzle": "rainy",
         "thunderstorm": "rainy",
         "snow": "snowy",
