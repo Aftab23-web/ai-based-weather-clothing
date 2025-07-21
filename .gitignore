@@ -1,38 +1,28 @@
-# 🔐 Hide your virtual environment folder
+# Ignore virtual environments
 venv/
 env/
-ENV/
 
-# 🧪 Python cache
+# Ignore Python cache files
 __pycache__/
 *.py[cod]
-*.pyo
 
-# ⚠️ Hide your private config
+# Ignore environment variables file
 .env
 
-# 💾 Ignore local databases
-*.db
-*.sqlite3
-
-# 🚫 Ignore model files if large or private
-*.pkl
-*.h5
-*.joblib
-
-# 🖥️ Ignore system/IDE files
+# Ignore system files
 .DS_Store
 Thumbs.db
+
+# Ignore VS Code settings
 .vscode/
 
-# 🧹 Build files
-*.egg-info/
-dist/
-build/
-
-# 📝 Log files
+# Ignore compiled files
 *.log
-logs/
+*.sqlite3
+*.db
 
-# (Optional) If you use Jupyter
+# Ignore Jupyter notebooks checkpoints (if any)
 .ipynb_checkpoints/
+
+# Ignore node_modules if using JS
+node_modules/

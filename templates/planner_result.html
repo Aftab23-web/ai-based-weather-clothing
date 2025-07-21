@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="manifest" href="/static/manifest.json">
-  <meta name="theme-color" content="#0ea5e9">
   <title>Weekly Planner - Outfit Packing</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -67,13 +65,5 @@
       <a href="{{ url_for('planner') }}" class="text-white hover:underline font-medium text-sm"> Back to Home</a>
     </div>
   </div>
-  <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/static/service-worker.js')
-      .then(function(reg) {
-        console.log("Service Worker registered ");
-      });
-  }
-</script>
 </body>
 </html>

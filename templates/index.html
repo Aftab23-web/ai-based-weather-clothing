@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="manifest" href="/static/manifest.json">
-  <meta name="theme-color" content="#0ea5e9">
   <title>Outfit Recommendation</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -58,6 +56,12 @@
       </button>
     </form>
 
+     <!-- Spinner -->
+      <div id="loading-spinner" class="hidden fixed inset-0 bg-white bg-opacity-70 z-50 flex flex-col items-center justify-center">
+        <div class="border-t-4 border-blue-500 border-solid rounded-full h-14 w-14 animate-spin"></div>
+        <p class="mt-4 text-blue-700 text-lg font-semibold animate-pulse">Fetching your personalized outfit suggestions...</p>
+      </div>
+
     <div class="mt-6 flex flex-col gap-3 text-center">
       <a href="{{ url_for('planner') }}" class="text-white hover:underline text-sm"> Weekly Planner</a>
       {% if current_user.is_authenticated and current_user.is_admin %}
@@ -65,12 +69,6 @@
       {% endif %}
     </div>
   </div>
-
-  <!-- Spinner -->
-<div id="loading-spinner" class="hidden fixed inset-0 bg-white bg-opacity-70 z-50 flex flex-col items-center justify-center">
-  <div class="border-t-4 border-blue-500 border-solid rounded-full h-14 w-14 animate-spin"></div>
-  <p class="mt-4 text-blue-700 text-lg font-semibold animate-pulse">Fetching your personalized outfit suggestions...</p>
-</div>
 
   <!--  Form Submit Script -->
   <script>
@@ -111,14 +109,6 @@
   window.addEventListener("load", () => {
     spinner.classList.add("hidden");
   });
-</script>
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/static/service-worker.js')
-      .then(function(reg) {
-        console.log("Service Worker registered ");
-      });
-  }
 </script>
   <script src="/static/script.js"></script>
 </body>

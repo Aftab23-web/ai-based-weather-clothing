@@ -3,8 +3,6 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <link rel="manifest" href="/static/manifest.json">
-  <meta name="theme-color" content="#0ea5e9">
   <title>Recommendation History</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
@@ -54,14 +52,6 @@
       <a href="/" class="text-blue-200 hover:underline text-lg font-semibold">Back to Recommendation</a>
     </div>
   </div>
-  <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/static/service-worker.js')
-      .then(function(reg) {
-        console.log("Service Worker registered ");
-      });
-  }
-</script>
 <script src="/static/script.js"></script>
 </body>
 </html>
